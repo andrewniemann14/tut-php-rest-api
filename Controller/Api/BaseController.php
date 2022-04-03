@@ -15,8 +15,21 @@ class BaseController {
   
   // gets query params, returns array
   protected function getQueryStringParams() {
-    return parse_str($_SERVER['QUERY_STRING'], $query);
+    $qryStrSplit = explode('?', $_SERVER['QUERY_STRING']);
+    $queryParams = array();
+    foreach ($qryStrSplit as $q) {
+      $pair = explode('=', $q);
+      $queryParams[$pair[0]] = $pair[1];
+    }
+    return $queryParams;
   }
+
+//   $queryParams = explode('?', $_SERVER['QUERY_STRING']);
+// $queries = array();
+// foreach ($queryParams as $q) {
+//   $pair = explode('=', $q);
+//   $queries[$pair[0]] = $pair[1];
+// }
 
   protected function sendOutput($data, $httpHeaders=array()) {
     header_remove('Set-Cookie');
@@ -28,6 +41,6 @@ class BaseController {
     }
 
     echo $data;
-    exit(); // TODO: no parentheses in tutorial...
+    exit();
   }
 }
